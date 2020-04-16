@@ -1,0 +1,54 @@
+# docker-compose.yml
+
+version: '2'
+services:
+  manager:
+    image: batchd:0.1.0.0
+    ports:
+      - "9681:9681"
+    links:
+      - db:db
+    user: batchd
+    environment:
+      PARA1: XXXXX
+      PARA2: YYYYY
+    command: static_batchd_nix_store_path/bin/batchd manager
+    volumes:
+      - "batchd_config_path:/etc/batchd"
+      - "batchd_data_path:/var/batchd/data"
+      - "batchd_home_path:/home/batchd"
+    depends_on:
+      - db
+    restart: unless-stopped
+  dispatcher:
+    image: batchd:0.1.0.0
+    #ports:
+    #  - "9681:9681"
+    links:
+      - db:db
+    user: batchd
+    environment:
+      PARA1: XXXXX
+      PARA2: YYYYY
+    command: static_batchd_nix_store_path/bin/batchd dispatcher
+    volumes:
+      - "batchd_config_path:/etc/batchd"
+      - "batchd_data_path:/var/batchd/data"
+      - "batchd_home_path:/home/batchd"
+    depends_on:
+      - db
+    restart: unless-stopped
+  db:
+    image: postgres:9.6
+    ports:
+      - "5432:5432"
+    user: postgres
+    environment:
+      POSTGRES_DB: batchd
+      POSTGRES_USER: batchd
+      POSTGRES_PASSWORD: batchd
+    command: postgres -c 'timezone=Asia/Shanghai'
+    volumes:
+      - "/var/postgres/data:/var/lib/postgresql/data"
+      - "/var/postgres/config:/docker-entrypoint-initdb.d"
+    restart: unless-stopped
