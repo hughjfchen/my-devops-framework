@@ -19,4 +19,6 @@ set -u
 ls ${SCRIPT_ABS_PATH}/../../../../batchd-core/*.cabal > /dev/null 2>&1 || ls ${SCRIPT_ABS_PATH}/../../../../batchd-core/package.yaml > /dev/null 2>&1 && cabal2nix ${SCRIPT_ABS_PATH}/../../../../batchd-core > ${SCRIPT_ABS_PATH}/nix/batchd-core.nix
 ls ${SCRIPT_ABS_PATH}/../../../../*.cabal > /dev/null 2>&1 || ls ${SCRIPT_ABS_PATH}/../../../../package.yaml > /dev/null 2>&1 && cabal2nix ${SCRIPT_ABS_PATH}/../../../.. > ${SCRIPT_ABS_PATH}/nix/batchd.nix
 
+[[ -e /usr/local/bin/pkg-config ]] && mv /usr/local/bin/pkg-config /usr/local/bin/pkg-config.modified-to-run-nix-shell
+
 done_banner "batchd" "build prepare"

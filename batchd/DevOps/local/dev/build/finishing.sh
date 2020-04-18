@@ -10,4 +10,6 @@ init_with_root_or_sudo "$0"
 
 begin_banner "batchd" "build finishing"
 
+[[ -e /usr/local/bin/pkg-config.modified-to-run-nix-shell ]] && mv /usr/local/bin/pkg-config.modified-to-run-nix-shell /usr/local/bin/pkg-config
+
 done_banner "batchd" "build finishing"
