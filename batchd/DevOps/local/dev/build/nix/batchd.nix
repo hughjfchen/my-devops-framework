@@ -15,7 +15,7 @@
 mkDerivation {
   pname = "batchd";
   version = "0.1.0.0";
-  src = /Users/chenjinfen/Desktop/projects/my-devops-framework/batchd/DevOps/local/dev/build/../../../..;
+  src = /home/chenjf/projects/my-devops-framework/batchd/DevOps/local/dev/build/../../../..;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [

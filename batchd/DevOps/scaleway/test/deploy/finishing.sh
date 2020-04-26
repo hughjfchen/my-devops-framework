@@ -10,8 +10,8 @@ init_with_root_or_sudo "$0"
 
 begin_banner "batchd" "deploy finishing"
 
-info "Need to do some application initialization, wait 3 seconds to make sure the application containers are ready."
-sleep 3
+info "Need to do some application initialization, wait 10 seconds to make sure the application containers are ready."
+sleep 10
 batchd_IMAGE_ID=$(sudo sg docker -c "docker images"|grep -w batchd|awk '{print $3}')
 if [ "X${batchd_IMAGE_ID}" != "X" ]; then
     cmdPath=$(sudo sg docker -c "docker image inspect ${batchd_IMAGE_ID}" | grep "/nix/store/" | awk -F"/" '{print "/nix/store/"$4}')
@@ -20,6 +20,10 @@ if [ "X${batchd_IMAGE_ID}" != "X" ]; then
     sudo sg docker -c "docker run -it --rm -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml upgrade-db"
     info "Creating the super user whose name is root, you should input the password for root twice in the following prompt"
     sudo sg docker -c "docker run -it --rm -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml create-superuser"
+    info "create following schedule:"
+    curl -X POST -u root:Passw0rd "http://localhost:9681/schedule" -d '{"time": [{"begin": "00:00:00",  "end": "23:59:59"}],  "weekdays": ["Sunday", "Monday", "Tuesday",  "Wednesday",  "Thursday",  "Friday", "Saturday"],  "name": "anytime"}'
+    curl -X POST -u root:Passw0rd "http://localhost:9681/schedule" -d '{"time": [{"begin": "08:00:00",  "end": "18:00:00"}],  "weekdays": ["Monday", "Tuesday",  "Wednesday",  "Thursday",  "Friday"],  "name": "working.hours"}'
+    curl -X POST -u root:Passw0rd "http://localhost:9681/queue" -d '{"name":"anytime.jobs.on.scaleway.test",  "schedule_name":"anytime",  "host_name":"scaleway.test", "title": "Queue holding jobs running anytime on scaleway.test", "enabled": true}'
 fi
 
 done_banner "batchd" "deploy finishing"
