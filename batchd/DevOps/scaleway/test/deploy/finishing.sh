@@ -18,9 +18,9 @@ if [ "X${batchd_IMAGE_ID}" != "X" ]; then
     MY_BATCHD_ROOT_PASSWORD="Passw0rd"
     sudo sed "s:host=db:host=172.17.0.1:g" < /var/batchd/config/batchd.yaml | sudo su -p -c "dd of=/var/batchd/config/batchd.admin.yaml" batchd
     info "Initializing the database schema"
-    sudo sg docker -c "docker run -it --rm -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml upgrade-db"
+    sudo sg docker -c "docker run --rm -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml upgrade-db"
     info "Creating the super user whose name is root, if prompt, you should input the password for root twice"
-    sudo sg docker -c "docker run -it --rm -e BATCHD_ROOT_PASSWORD=${MY_BATCHD_ROOT_PASSWORD} -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml create-superuser"
+    sudo sg docker -c "docker run --rm -e BATCHD_ROOT_PASSWORD=${MY_BATCHD_ROOT_PASSWORD} -v /var/batchd/config:/var/batchd/config ${batchd_IMAGE_ID} ${cmdPath}/bin/batchd-admin --config /var/batchd/config/batchd.admin.yaml create-superuser"
     info "create following schedule:"
     curl -X POST -u "root:${MY_BATCHD_ROOT_PASSWORD}" "http://localhost:9681/schedule" -d '{"time": [{"begin": "00:00:00",  "end": "23:59:59"}],  "weekdays": ["Sunday", "Monday", "Tuesday",  "Wednesday",  "Thursday",  "Friday", "Saturday"],  "name": "anytime"}'
     echo ""
