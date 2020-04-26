@@ -26,7 +26,7 @@ main = do
       let logSettings = getLoggingSettings cfg
       case cmd of
         CreateSuperuser {} -> do
-            password <- getPassword2
+            password <- getAdminPassword
             withLoggingT logSettings $ do
               logger <- ask
               liftIO $ createSuperUser cfg logger (username cmd) password
