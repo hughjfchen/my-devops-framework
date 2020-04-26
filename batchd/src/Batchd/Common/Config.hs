@@ -7,6 +7,8 @@ import Control.Exception
 import Data.Yaml
 import System.IO
 
+import System.Environment
+
 import Batchd.Core.Common.Types
 -- import Batchd.Core.Common.Localize
 import Batchd.Core.Common.Config
@@ -50,6 +52,15 @@ getPassword2 = do
   if pwd1 /= pwd2
     then fail "passwords do not match"
     else return pwd1
+
+-- | Get admin password from the environmetn variable "BATCHD_ROOT_PASSWORD" first,
+-- | If not present, call getPassword2
+getAdminPassword :: IO String
+getAdminPassword = do
+  pwd <- lookupEnv "BATCHD_ROOT_PASSWORD"
+  case pwd of
+    Nothing -> getPassword2
+    Just pwd' -> pure pwd'
 
 -- | Execute IO actions with enabled\/disabled terminal echo,
 -- and then return echo state to previous.
