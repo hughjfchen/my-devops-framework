@@ -7,7 +7,11 @@
 mkDerivation {
   pname = "batchd-core";
   version = "0.1.0.0";
+<<<<<<< HEAD
   src = /home/chenjf/projects/my-devops-framework/batchd/DevOps/local/dev/build/../../../../batchd-core;
+=======
+  src = /Users/chenjinfen/Desktop/projects/my-devops-framework/batchd/DevOps/local/dev/build/../../../../batchd-core;
+>>>>>>> cf4be9cce62086418b9c0f3d0ae5baff0568507f
   libraryHaskellDepends = [
     aeson base bytestring containers dates directory filepath
     heavy-logger hsyslog localize mtl persistent persistent-template
