@@ -1,4 +1,4 @@
-name: command.output.to.file
+name: commandoutputtofile
 template: "$command $args > $outputfile 2>&1"
 params:
   - name: command
