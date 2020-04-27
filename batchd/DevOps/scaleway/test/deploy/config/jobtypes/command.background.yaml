@@ -1,4 +1,4 @@
-name: command
+name: command.background
 template: "$command $args &"
 params:
   - name: command
